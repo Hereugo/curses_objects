@@ -20,7 +20,7 @@ def rectangle(win, uly, ulx, lry, lrx):
 
 
 # TODO: Handle dynamic resizing
-class Form(Generic[T]):
+class Select(Generic[T]):
     """Widget using a window object."""
 
     def _update_max_yx(self):
@@ -28,7 +28,7 @@ class Form(Generic[T]):
         self.maxy = maxy - 1
         self.maxx = maxx - 1
 
-    def __init__(self, stdscr: window, form_title: str, options: list[T]):
+    def __init__(self, stdscr: window, title: str, options: list[T]):
         height, width = stdscr.getmaxyx()
         ncols, nlines = width // 2, height // 2
 
@@ -55,7 +55,7 @@ class Form(Generic[T]):
 
         stdscr.refresh()
 
-        self.form_title = form_title
+        self.title = title
         self.title_win = curses.newwin(1, ncols, uly - 2, ulx)
         self.win = curses.newwin(nlines, ncols, uly, ulx)
         self.options = options
@@ -73,7 +73,7 @@ class Form(Generic[T]):
         2. ch is a down arrow key -> move selection down
         3. ch is an enter ->
             3.1 enter pressed once, selects an option.
-            3.2 enter pressed twice, confirms selection (ends form).
+            3.2 enter pressed twice, confirms selection.
         4. otherwise, do nothing.
         """
         self._update_max_yx()
@@ -129,7 +129,7 @@ class Form(Generic[T]):
         elif self.offset_by + y == len(self.options) - 1:
             progress_text = "│  BOT"
 
-        self.title_win.addstr(0, 1, self.form_title[: self.maxx - progress_size])
+        self.title_win.addstr(0, 1, self.title[: self.maxx - progress_size])
         self.title_win.addstr(0, self.maxx - len(progress_text) - 1, progress_text)
 
         # Clear screen
@@ -182,8 +182,8 @@ class Form(Generic[T]):
 
 
 if __name__ == "__main__":
-    form_title: str = (
-        "Client Form this is a super long text that should be truncated apple apple apple"
+    select_title: str = (
+        "Select Title this is a super long text that should be truncated apple apple apple"
     )
     options = [
         "1",
@@ -202,8 +202,8 @@ if __name__ == "__main__":
         "14",
     ]
 
-    def display_form(stdscr: window):
-        return Form(stdscr, form_title, options).select()
+    def display_select(stdscr: window):
+        return Select(stdscr, select_title, options).select()
 
-    form_data = curses.wrapper(display_form)
-    print("Form data:", form_data)
+    select_data = curses.wrapper(display_select)
+    print("Select data:", select_data)
