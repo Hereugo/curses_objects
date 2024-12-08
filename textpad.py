@@ -23,7 +23,13 @@ class Textpad:
         uly, ulx = height // 2 - nlines // 2, width // 2 - ncols // 2
 
         # TODO: Print instructions in top-left corner.
-        ...
+        stdscr.addstr(
+            1,
+            1,
+            "1. Use left and right arrow keys to move. \n"
+            + " 2. Any valid characters pressed, would be displayed on screen. \n"
+            + " 3. Press DEL/BAC to delete characters.",
+        )
 
         stdscr.addstr(uly - 2, ulx - 1, label)
         rectangle(stdscr, uly - 1, ulx - 1, uly + nlines, ulx + ncols)
